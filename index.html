@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/pdf-lib@1.4.0"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+    <script src="assets/pspdfkit.js"></script>
+</head>
+<body>
+    <div>
+        <div id="pspdfkit" style="height: 100vh;"></div>
+    </div>
+   
+
+    <script>
+       PSPDFKit.load({
+    container: "#pspdfkit",
+    document: "Presentation3.pdf" // Add the path to your PDF document here.
+  })
+  .then(async function(instance) {
+    try {
+      console.log("PSPDFKit loaded", instance);
+      const rects = PSPDFKit.Immutable.List([
+        new PSPDFKit.Geometry.Rect({ left: 10, top: 120, width: 200, height: 10 }),
+        new PSPDFKit.Geometry.Rect({ left: 10, top: 150, width: 200, height: 10 })
+      ]);
+      const annotation = new PSPDFKit.Annotations.HighlightAnnotation({
+        pageIndex: 0,
+        rects: rects,
+        boundingBox: PSPDFKit.Geometry.Rect.union(rects)
+      });
+      await instance.create(annotation);
+      console.log("Highlight annotation added successfully.");
+    } catch (error) {
+      console.error("Error adding highlight annotation:", error.message);
+    }
+  })
+  .catch(function(error) {
+    console.error("PSPDFKit failed to load:", error.message);
+  });
+    </script>
+</body>
+</html>
